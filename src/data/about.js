@@ -1,0 +1,3 @@
+const about =  `The CHeLab platform predicts potential problems in synthesis reactions with AI models. It enriches its database based on cases extracted from scientific articles and expert feedback. Problems are presented in a categorized manner according to chemist, engineer, and student types. For each problem, related articles, root-cause analysis, and practical solutions are displayed. The platform facilitates the user experience through interactive search, notifications, and visualization.`;
+
+export default about;
