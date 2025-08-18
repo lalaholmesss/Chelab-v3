@@ -74,17 +74,23 @@ export default function SearchBar() {
     >
       <div className="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
       
-      <div className="relative z-10 flex flex-col  text-center bottom-20 text-white gap-6 w-full max-w-[1000px] px-4">
-        <h1 className="text-7xl pb-3 uppercase font-bold ">Welcome!</h1>
-        <h2 className="text-2xl font-light">The first feeling of chemists</h2>
-      {/* <form
-          className="w-full flex flex-col gap-8 items-center bg-white rounded-xl relative overflow-hidden p-8 z-10"
+      <div className="relative z-10 flex flex-col text-center bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-20 text-white gap-4 sm:gap-5 md:gap-6 w-full max-w-[1000px] px-4 sm:px-6 md:px-8">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl pb-2 md:pb-3 uppercase font-bold leading-tight">
+          Welcome!
+        </h1>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-light">
+          The first feeling of chemists
+        </h2>
+      
+      {/* Uncommented and made responsive for reference
+        <form
+          className="w-full flex flex-col gap-4 md:gap-6 lg:gap-8 items-center bg-white rounded-xl relative overflow-hidden p-4 sm:p-6 md:p-8 z-10"
           onSubmit={handleSubmit}
         >
           <div className="relative w-full max-w-[800px]">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
-              className="absolute left-5 top-1/2 transform -translate-y-1/2 text-lightgray"
+              className="absolute left-3 sm:left-4 md:left-5 top-1/2 transform -translate-y-1/2 text-lightgray text-sm sm:text-base"
             />
 
             <input
@@ -92,13 +98,13 @@ export default function SearchBar() {
               placeholder="Enter Prompt"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="w-full pl-14 pr-6 py-3 rounded-xl text-lg text-black placeholder-gray-500 focus:outline-none"
+              className="w-full pl-10 sm:pl-12 md:pl-14 pr-4 sm:pr-5 md:pr-6 py-2 sm:py-2.5 md:py-3 rounded-xl text-base sm:text-lg text-black placeholder-gray-500 focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
-            className="bg-main text-white text-2xl cursor-pointer px-8 py-3 rounded-lg border-none hover:bg-blue-800 transition font-extralight"
+            className="bg-main text-white text-lg sm:text-xl md:text-2xl cursor-pointer px-6 sm:px-7 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-lg border-none hover:bg-blue-800 transition font-extralight"
             disabled={loading}
           >
             {loading ? "Searching..." : "Search"}
@@ -106,11 +112,12 @@ export default function SearchBar() {
         </form>
 
         {(responseText || error) && (
-          <div className="bg-white text-black max-w-[800px] p-3 rounded-xl shadow-lg text-left">
-            {error && <p className="text-red-500">{error}</p>}
-            {responseText && <p className="whitespace-pre-line">{responseText}</p>}
+          <div className="bg-white text-black max-w-[800px] p-3 sm:p-4 md:p-5 rounded-xl shadow-lg text-left">
+            {error && <p className="text-red-500 text-sm sm:text-base">{error}</p>}
+            {responseText && <p className="whitespace-pre-line text-sm sm:text-base">{responseText}</p>}
           </div>
-        )}*/}
+        )}
+      */}
         
       </div>
     </div>

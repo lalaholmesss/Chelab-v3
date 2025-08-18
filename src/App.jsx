@@ -10,6 +10,8 @@ import DisplayDiagram from "./components/Engineers/DisplayDiagram";
 import Engineers from "./components/Engineers/Engineers";
 import PfdMaker from "./components/Engineers/PfdMaker";
 import IncidentList from "./components/Engineers/IncidentList";
+import CreatePost from "./pages/CreatePost";
+import Comments from "./pages/CommentsPg"
 
 function App() {
     const location = useLocation();
@@ -19,13 +21,14 @@ function App() {
   return (
     <>
       {!hideHeaderFooter && <Header/>}
+      
       <Routes>
         <Route path="/" element={<Home />}></Route>
         {/*
         <Route path="/engineers" element={<Engineers/>}></Route>
         
         
-        <Route path="/discussion/create-post" element={<CreatePost />}></Route>
+       
         <Route path="/admin/requests" element={<AdminRequests/>}></Route>
         <Route path="/admin/researchers" element={<AdminResearchers />}/> */}
         <Route path="/researchers" element={<Researchers/>} />
@@ -34,7 +37,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/engineers/pfd-maker" element={<PfdMaker />} />
-                <Route path="/engineers/safety" element={<IncidentList />} />
+        <Route path="/engineers/safety" element={<IncidentList />} />
+        <Route path="/discussion/create-post" element={<CreatePost />}></Route>
+        <Route path="/discussion" element={<Comments />}></Route>
 
       </Routes>
       {!hideHeaderFooter && <Footer />}

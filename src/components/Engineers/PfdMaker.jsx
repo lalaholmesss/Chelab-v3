@@ -10,26 +10,44 @@ export default function PfdMaker() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // Make canvas responsive
+    const resizeCanvas = () => {
+      const container = canvas.parentElement;
+      const containerWidth = container.clientWidth;
+      const containerHeight = Math.min(500, window.innerHeight * 0.6);
+      
+      canvas.width = containerWidth;
+      canvas.height = containerHeight;
+      
+      ctx.strokeStyle = '#0E47A1';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    };
     
-    ctx.strokeStyle = '#0E47A1';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    return () => window.removeEventListener('resize', resizeCanvas);
   }, []);
 
-  const getMousePos = (e) => {
+  const getEventPos = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
+    
+    // Handle both mouse and touch events
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      x: clientX - rect.left,
+      y: clientY - rect.top
     };
   };
 
   const startDrawing = (e) => {
-    const pos = getMousePos(e);
+    e.preventDefault();
+    const pos = getEventPos(e);
     setIsDrawing(true);
     setStartPos(pos);
     
@@ -43,11 +61,12 @@ export default function PfdMaker() {
   };
 
   const draw = (e) => {
+    e.preventDefault();
     if (!isDrawing) return;
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const pos = getMousePos(e);
+    const pos = getEventPos(e);
     
     if (tool === 'pen') {
       ctx.lineTo(pos.x, pos.y);
@@ -56,11 +75,12 @@ export default function PfdMaker() {
   };
 
   const stopDrawing = (e) => {
+    e.preventDefault();
     if (!isDrawing) return;
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const pos = getMousePos(e);
+    const pos = getEventPos(e);
     
     if (tool === 'rectangle') {
       const width = pos.x - startPos.x;
@@ -90,49 +110,53 @@ export default function PfdMaker() {
   };
 
   return (
-    <div className="w-full mx-auto py-20 bg-gray-100 flex justify-center min-h-screen bg-background ">
-        <h2 className="relative right-24 bottom-12 text-main font-semibold text-2xl">PFD Maker</h2>
-      <div className="bg-white border-2 max-w-6xl mt-10 border-main rounded-lg shadow-lg overflow-hidden">
-        <div className="bg-gray-50 border-b border-gray-200 p-3 flex items-center gap-4">
-          <div className="flex gap-2">
+    <div className="w-full mx-auto py-8 md:py-12 lg:py-20 bg-background flex flex-col items-center min-h-screen px-4">
+      <h2 className="text-main font-semibold text-xl sm:text-2xl lg:text-3xl mb-6 md:mb-8 text-center">
+        PFD Maker
+      </h2>
+      
+      <div className="bg-white border-2 w-full max-w-6xl border-main rounded-lg shadow-lg overflow-hidden">
+        
+        <div className="bg-gray-50 border-b border-gray-200 p-2 sm:p-3 flex flex-wrap items-center gap-2 sm:gap-4">
+          <div className="flex gap-1 sm:gap-2">
             <button
               onClick={() => setTool('rectangle')}
-              className={`p-2 rounded border-2 transition-all ${
+              className={`p-1.5 sm:p-2 rounded border-2 transition-all ${
                 tool === 'rectangle' 
                   ? 'border-main bg-blue-50 text-main' 
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               title="Rectangle"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="16" height="16" className="sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
               </svg>
             </button>
             
             <button
               onClick={() => setTool('circle')}
-              className={`p-2 rounded border-2 transition-all ${
+              className={`p-1.5 sm:p-2 rounded border-2 transition-all ${
                 tool === 'circle' 
                   ? 'border-main bg-blue-50 text-main' 
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               title="Circle"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="16" height="16" className="sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="9"/>
               </svg>
             </button>
             
             <button
               onClick={() => setTool('pen')}
-              className={`p-2 rounded border-2 transition-all ${
+              className={`p-1.5 sm:p-2 rounded border-2 transition-all ${
                 tool === 'pen' 
                   ? 'border-main bg-blue-50 text-main' 
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               title="Pen"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="16" height="16" className="sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 19l7-7 3 3-7 7-3-3z"/>
                 <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
                 <path d="M2 2l7.586 7.586"/>
@@ -142,29 +166,27 @@ export default function PfdMaker() {
             
             <button
               onClick={() => setTool('line')}
-              className={`p-2 rounded border-2 transition-all ${
+              className={`p-1.5 sm:p-2 rounded border-2 transition-all ${
                 tool === 'line' 
                   ? 'border-main bg-blue-50 text-main' 
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               title="Line"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="16" height="16" className="sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="4" y1="20" x2="20" y2="4"/>
               </svg>
             </button>
-            
-            
           </div>
           
-          <div className="h-6 w-px bg-gray-300"></div>
+          <div className="h-4 sm:h-6 w-px bg-gray-300"></div>
           
           <button
             onClick={clearCanvas}
-            className="p-2 rounded border-2 border-gray-300 hover:border-gray-400 transition-all"
+            className="p-1.5 sm:p-2 rounded border-2 border-gray-300 hover:border-gray-400 transition-all"
             title="Clear Canvas"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="16" height="16" className="sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M3 6h18"/>
               <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
               <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
@@ -172,16 +194,20 @@ export default function PfdMaker() {
           </button>
         </div>
         
-        <canvas
-  ref={canvasRef}
-  width={1200}
-  height={500}
-  className="w-full h-[500px] cursor-crosshair bg-white"
-  onMouseDown={startDrawing}
-  onMouseMove={draw}
-  onMouseUp={stopDrawing}
-  onMouseLeave={stopDrawing}
-/>
+        <div className="relative w-full">
+          <canvas
+            ref={canvasRef}
+            className="w-full h-64 sm:h-80 md:h-96 lg:h-[500px] cursor-crosshair bg-white block touch-none"
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            onMouseLeave={stopDrawing}
+            onTouchStart={startDrawing}
+            onTouchMove={draw}
+            onTouchEnd={stopDrawing}
+            style={{ touchAction: 'none' }}
+          />
+        </div>
       </div>
     </div>
   );
